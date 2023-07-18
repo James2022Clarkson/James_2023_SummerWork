@@ -1,0 +1,101 @@
+Suggestions for assignments:
+Estimations for time commitment
+learning objectives-
+requirements to know -> things that will be learned
+
+RSA & DH labs
+
+project description: summary of material for usage(can have multiple versions)
+Project points:
+-possible problems for students(document solutions & explainations)
+-project learning objectives
+-teacher's note(alternatives, differant settings)
+-supporting materials(lectures, adequite documentation for references, etc.)
+-a short video of a 'finished project' example
+
+-assign projects to suddent-how?
+
+RSA with optional Signature module?
+
+july 28 (end date)
+
+Source Videos:
+https://www.khanacademy.org/computing/computer-science/cryptography#modern-crypt
+(Mainly For RSA, but does explain Diffie-Hellman too, Uses Euler's Theorem slightly differently, as it doesn't directly calculate the Modular Inverse)
+(Excellent example, even if the process is a bit different then the one used here, they both work out.
+
+
+
+practical scenarios(d needed)
+-clarify public/private, and the inablity to reconsturct private stuff
+
+daqinghou
+
+
+What class/Requirements
+
+
+
+
+RSA Passwordless: Buttercup
+
+
+Explaining Modular Equivelence: 2-3 Examples (16 & 26 mod 10 = 6, 14 mod 5 = 4 mod 5)
+-One Way function
+	-Example: Factoring 391 (17 & 23)
+		Trapdoor: Factoring 391 *knowing* 17 or 23, find the other.
+	-Difficulty of finding Prime Factorization from number, Ease of finding Prime Factorization's comparitive number.
+
+Unlike Syncronious Encryption, Lock and key aren't the same piece of information
+	-Harder to intercept, but also harder to make
+How do we make a lock and key pair(and how are they connected), mathematically?
+
+We want to be able to compute them easily, but also make it hard to reverse calcuate/crack
+-One Way function: Literally the definition
+
+
+Phi Function(Euler's Totient Function): requires knowing factors of a number to calcuate
+	-Multiplicitive
+	-a 'trapdoor' function, where it's hard to find without knowing the prime factorization
+
+	-Phi of two prime factors φ(n) = φ(p)*φ(q) = (p-1)*(q-1)
+		-Note: Can't find Phi without prime factors: Prime Factorization Problem
+
+
+define: x ≡ y (mod φ(n))
+	-reminder that you need φ(n) to do this, and that it's 'secure'
+	- (1 ≡ 1), (e^1 * e^-1), e^-1 isn't a normal 'inverse', it's a modular inverse, and hense will only work for φ(n) (it's mod)
+	- e^-1 defined as 'd',  e*d ≡ 1 (mod φ(n))
+
+	-requirements for a modular inverse to exist:
+		-coprime: examples(6*x ≡ 1 (mod 8), 5*x ≡ 1 mod 10)
+		-e < φ(n): otherwise e - φ(n) is possible, and a 'better' value.
+
+Euler's Theorem special case:	if x ≡ y (mod φ(n)), then a^x ≡ a^y (mod n)
+	-'would you look at that, we've got an equation to fit it!'
+		-don't worry about why φ(n) is here, just know it works.
+
+	-e*d ≡ 1 (mod φ(n) (we've found both e&d at this point)
+	-m^e*d ≡ m^1 (mod n)
+
+	-we've 'hidden' the φ(n) value from easy calcluation, and the path to calculating d along with it.
+
+
+Publicize e&n, while keeping d(n is also used for decryption, but doesn't need to stay private, and tossing the remaining information(p,q, φ(n))
+
+Transformation into encrypt and decrypt: seperate e & d.
+	-Note: mod n applied halfway through to keep numbers reasonably easy to calculate: finding m^e = c would also work, but significantly increases processing demand(an easy algorithm already exists for modular exponentation)
+
+m^e*d ≡ m (mod n)...
+m^e ≡ c (mod n), c^d ≡ m (mod n)
+
+note that m<n for the algorithm to work(since we're actually calulating it using 'm^e*d mod n = m', which would no longer be true)
+
+
+
+password-less:
+ssh- secure Shell
+git
+
+message to Integer, Integer to message
+EEA, GCD, make your own

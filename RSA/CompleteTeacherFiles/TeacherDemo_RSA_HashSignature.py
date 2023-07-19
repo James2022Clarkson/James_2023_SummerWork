@@ -1,4 +1,4 @@
-from Teacher_RSAClasses_HashSignatureFunction import *
+from Teacher_RSAClass_HashSignatureFunctions import *
 
 
 # This File is a demonstration of RSA Encryption in practice, for the logic behind the decisions made, see
@@ -78,7 +78,7 @@ if __name__ == "__main__":
     print("This particular message's signature from Alice is", message_Signature)
 
     # as an example, let's examine Bob's signature on the exact same message
-    print("Bob's signature on the exact same message would be :", RSA_Hash_Encrypt(h, Bob_private_key))
+    print("Bob's signature on the exact same message would be :", RSA_Encrypt(h, Bob_private_key))
 
     print("\n")  # to space out the output for readability
 
@@ -101,16 +101,16 @@ if __name__ == "__main__":
     # we can print the deciphered message immediately, but the signature is still one step away.
     print("Bob's Deciphered Message reads: ", deciphered_message)
     print("Bob Received this Deciphered Signature: ", partly_deciphered_message_signature)
-    # Alice's Signature can be checked using a simple fact, it's a halfway encrypted form of a Hash
+    # Alice's Signature can be checked using a simple fact, it's an encrypted form of a Hash, having used Alice's private key
     # At some point, Alice and Bob would have agreed to use a particular hash(which was also a  CHF), and even if someone knows this,
-    # they don't know Bob's Private Key, which he used to decipher the ciphered text into Alice's Hash Signature.
-    # They'd still be stuck at decrypting the message into the Hash Signature, and wouldn't be able to see the signature at all.
+    # they don't know Bob's Private Key, which he used to decipher the ciphered text into Alice's Private Key encrypted Hash Signature.
+    # They'd still be stuck at decrypting the message into Alice's encrypted Hash Signature, and wouldn't be able to see the signature at all.
 
     # We can confirm Alice's key was used by 'finishing' the decryption of the Signature, and comparing it to the result we get normally
     # ('normally' as in hashing the message that was signed using the agreed upon hash table)
 
-    comparable_message_signature = RSA_Hash_Decrypt(partly_deciphered_message_signature, Alices_public_key)
-    # the first method is to complete the decryption of Alice's key pair, undoing 'd'(the private key) with 'e'(the public key) in this case
+    comparable_message_signature = RSA_Decrypt(partly_deciphered_message_signature, Alices_public_key)
+    # the first method is to undo the encryption of Alice's key pair, using 'e'(the public key) in this case
     normal_hash = Hashing(deciphered_message)
     # the second is to hash the message ourselves, to see what we'd have gotten normally
 
@@ -121,10 +121,3 @@ if __name__ == "__main__":
     if comparable_message_signature == normal_hash:
         print("As you can see, they're the same, and since we used the 'e' of alice's pair to decrypt,\n"
               "we know she must have used her private 'd' to encrypt, since the pair invert each other")
-
-
-    #
-    # print("demonstration")
-    # message = 'testing'
-    # for letter in range(len(message)):
-    #     print(message[letter])

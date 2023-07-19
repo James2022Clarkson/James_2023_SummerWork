@@ -1,12 +1,18 @@
 import random  # random number generator for 'e'
 import sympy  # prime generator(note that you may not have this installed, in which case, run 'pip install sympy' from your command line(or remove lines 15-17)
-import math  # LCM and GCD functions
+import math  # GCD function
 from Teacher_BackgroundFunctions_CoveredInLabs import *  # Euclid's Extended Algorythm (EEA) is here, as well as
 # non-critical but still used functions, such as TextToInt, IntToText, and Padding
+import hashlib  # contains hashing algorythm to be used for digital signature & checking
 
-import hashlib  # contains hashing algorythm to be used.
+
+# This File contains a complete RSA class & associated functions, and Hashing based Signature generation and checks.
+# (for the digital signature functions, see lines 83+)
 
 
+# An example of how RSA could be implemented. The Class handles generating keys, while a series of functions perform
+# the encryption and decryption process. The outside functions could also be implemented into the class, or the class
+# could be broken up into a series of functions instead.
 class KeyGeneration:
     """ p and q must be primes, or both 0 for auto-generation\n
     If you think there's an issue, try increasing the size of your factors"""
@@ -35,7 +41,7 @@ class KeyGeneration:
         """in the form 'e, n'"""
         return self.e, self.n
 
-    def __str__(self):
+    def __str__(self):  # status check
         return str(f"n = {self.n}\n"
                    f"d = {self.__d}\n"
                    f"e = {self.e}")
@@ -49,23 +55,23 @@ def RSA_Method(message, type, n):
     return pow(message, type, n)  # all RSA en/decryption takes the form (a^b mod n) = output
 
 
-def RSA_Encrypt(message, Public_Key):
+def RSA_Encrypt(message, Encrypt_Key):
     """Enter a message(int or string) to be ciphered, along with the two part key to cipher with."""
     if isinstance(message, str):  # if you put a string in, we turn it into an integer first
         message = TextToInt(message)
-    if message > Public_Key[1]:  # if your message is larger than your modulus(n), you will lose information, corrupting your message
+    if message > Encrypt_Key[1]:  # if your message is larger than your modulus(n), you will lose information, corrupting your message
         raise BaseException(f"Try again, your message is too large or n is too small\n"
                             f"message = {message}\n"
-                            f"n is    = {Public_Key[1]}\n"
+                            f"n is    = {Encrypt_Key[1]}\n"
                             f"Or split the message into smaller pieces and send it in packets\n")
-    return RSA_Method(message, Public_Key[0], Public_Key[1])
+    return RSA_Method(message, Encrypt_Key[0], Encrypt_Key[1])
 
 
-def RSA_Decrypt(ciphered_message, Private_Key):
-    """Inverts the operation performed by the Public Key Encryption\n
+def RSA_Decrypt(ciphered_message, Decrypt_Key):
+    """Inverts the operation performed by the Encryption Key\n
     Returns as string, if you want an Integer use RSA_Decrypt_Integer"""
     # RSA_Method returns the integer form of our message, so we quickly convert it back into a string before returning it
-    integer_message = RSA_Method(ciphered_message, Private_Key[0], Private_Key[1])
+    integer_message = RSA_Method(ciphered_message, Decrypt_Key[0], Decrypt_Key[1])
     string_message = IntToText(integer_message)
     return string_message
 
@@ -75,7 +81,7 @@ def RSA_Decrypt_Integer(ciphered_message, Private_Key):
     return RSA_Method(ciphered_message, Private_Key[0], Private_Key[1])
 
 ###
-# Functions for Hashing as a Signature:
+# Functions bellow are for Hashing as a Signature:
 ###
 # (CHF Stands for Cryptographic Hashing Function, a subset of normal Hashing Functions useful in Cryptography)
 
@@ -101,16 +107,3 @@ def SigningVerify(message, Signature, Their_Public_key):
     message_hash = Hashing(message)  # rebuilding what the sender's Hash was
     HashCheck = pow(Signature, Their_Public_key[0], Their_Public_key[1])  # s^e (mod n) will equal the hash, following s^e ≡ (h^e)^d mod (n) = h
     return message_hash == HashCheck
-
-
-def RSA_Hash_Encrypt(hash, Private_Key):
-    """This is a reskin of RSA Encryption with a new label for distinction\n
-    the only difference is the application of the private key for encryption"""
-    # RSA_Encrypt's internal variables are labeled 'Public Key', but in this case we're using the private ones to encrypt isntead
-    return RSA_Encrypt(hash, Private_Key)
-
-
-def RSA_Hash_Decrypt(hash, Public_Key):
-    """This is a reskin of RSA Decryption with a new label for distinction\n
-    The only difference is the application of the public key for decryption"""
-    return RSA_Decrypt_Integer(hash, Public_Key)

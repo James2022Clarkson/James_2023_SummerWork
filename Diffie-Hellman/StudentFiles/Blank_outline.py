@@ -3,6 +3,18 @@ from PrimitiveRootFunction import LeastPrimitiveRoot
 
 
 # Diffie-Hellman Class can be created in a different file and imported, or here.
+class DH:
+    def __init__(self, prime, primative_root):
+        """any initial processes should occur here"""
+        self.prime, self.primative_root = prime, primative_root
+
+    def Exchangeable_generation(self, secret_value):
+        """create the half-key that can be exchanged with the other side here"""
+        return exchangeable
+
+    def Final_key_generation(self, half_key, secret_value):
+        """using the same secret_value from Exchangeable_generation, finish the key received from another instance"""
+        return secret_key
 
 
 if __name__ == '__main__':

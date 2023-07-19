@@ -3,33 +3,34 @@ import random  # random number generator for 'e': random.random(lower-bound, upp
 import math  # GCD function: math.gcd(<comparable values>) --returns GCD
 # https://docs.python.org/3/library/math.html#math.gcd
 
-# For finding a Modular Multiplicative Inverse, use pow(<number to find MMI of>, -1, mod=modulus)
+# For finding a Modular Multiplicative Inverse, use pow(<number to find MMI of>, -1, <modulus>)
 
-# This file implements a RSA Class in a basic format, and does not include any safeguards or additional usages.
-# For some details on the why and how, see ###POWERPOINT###
-
-
-class KeyGeneration:
+class RSA_KeyGeneration:
     def __init__(self, p, q):
-        """ p and q must be distinct primes"""
-        self.n = p * q
-        φ_n = (p - 1) * (q - 1)
-        self.e = 2**4 + 1
-        while math.gcd(self.e, φ_n) != 1:
-            self.e = random.randint(3, φ_n - 1)
-        self.d = pow(self.e, -1, mod=φ_n)
+        """assume p and q are distinct primes"""
+
 
     def getPrivateKey(self):
-        """in the form (d, n)"""
-        return self.d, self.n
-
+        return None
     def getPublicKey(self):
-        """in the form (e, n)"""
-        return self.e, self.n
+        return None
+
+if __name__ == "__main__":
+    p = 47
+    q = 73
+
+    keygen = RSA_KeyGeneration(p, q)
+    # generate the necessary keypair values here, using the RSA_KeyGeneration class's initialization
+
+    message = 13
+
+    # Use the RSA encryption method to cipher and then decipher a message.
+    encrypted_message = cipher_function(message, )
+    # this ciphered message is then transferred over a secure, but not necessarily private, connection
+    decrypted_message = decipher_function(encrypted_message, )
 
 
-def RSA_Method(message, key):
-    """Requires Public or Private key\n
-    returns (message^key[0]) mod key[1])\n
-    Formatted to work with getKey Functions """
-    return pow(message, key[0], key[1])
+    if message == decrypted_message:
+        print("Your message has been successfully transferred!")
+    else:
+        print("There's an issue!")

@@ -73,7 +73,7 @@ if __name__ == "__main__":
 
     # if you remember, e and d are inverses, and which one is the public and which is the private are only conveniences
     # this means we can encrypt with e, and then only d can decrypt, the inverse of the normal method
-    message_Signature = RSA_Hash_Encrypt(h, Alice_private_key)
+    message_Signature = RSA_Encrypt(h, Alice_private_key)
     print("The message is:", message)
     print("This particular message's signature from Alice is", message_Signature)
 
@@ -86,7 +86,7 @@ if __name__ == "__main__":
     # so using that signature, the reader will know the sender is in possession of Alice's key, only Alice has her key.
 
     # then, we'd send our message like normal, only we're also sending something else,
-    # our hash value signature, which has been made by Alice's private key, is then encrypted again using a new key
+    # our hash value signature, which has been made by Alice's private key, is then encrypted again using a second key
 
     ciphered_message = RSA_Encrypt(message, Bobs_public_key)  # Alice is sending to Bob
     ciphered_message_signature = RSA_Encrypt(message_Signature, Bobs_public_key)
@@ -96,7 +96,6 @@ if __name__ == "__main__":
     # Bob then follows standard procedure to decipher the messages
     deciphered_message = RSA_Decrypt(ciphered_message, Bob_private_key)
     partly_deciphered_message_signature = RSA_Decrypt_Integer(ciphered_message_signature, Bob_private_key)
-    # we can't use RSA_Decrypt because it returns as a string, and we're comparing ints.
 
     # we can print the deciphered message immediately, but the signature is still one step away.
     print("Bob's Deciphered Message reads: ", deciphered_message)
@@ -109,7 +108,7 @@ if __name__ == "__main__":
     # We can confirm Alice's key was used by 'finishing' the decryption of the Signature, and comparing it to the result we get normally
     # ('normally' as in hashing the message that was signed using the agreed upon hash table)
 
-    comparable_message_signature = RSA_Decrypt(partly_deciphered_message_signature, Alices_public_key)
+    comparable_message_signature = RSA_Decrypt_Integer(partly_deciphered_message_signature, Alices_public_key)
     # the first method is to undo the encryption of Alice's key pair, using 'e'(the public key) in this case
     normal_hash = Hashing(deciphered_message)
     # the second is to hash the message ourselves, to see what we'd have gotten normally
